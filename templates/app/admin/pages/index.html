@@ -1,0 +1,188 @@
+{% extends 'app/admin/base.html' %} 
+{% block container %}
+  {% load static %}
+
+  <div class="page-inner">
+    <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
+      <div>
+        <h3 class="fw-bold mb-3">Tableau de Bord</h3>
+        <h6 class="op-7 mb-2">Le récapitulatif des dernières mises à jour</h6>
+      </div>
+      <div class="ms-md-auto py-2 py-md-0">
+        <a href="/admin/" class="btn btn-label-info btn-round me-2">La super gestion</a>
+        {% comment %} <a href="#" class="btn btn-primary btn-round">Add Customer</a> {% endcomment %}
+      </div>
+    </div>
+    <div class="row row-card-no-pd">
+      <div class="col-sm-6 col-md-3">
+        <div class="card card-stats card-round">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-5">
+                <div class="icon-big text-center">
+                  <i class="icon-docs text-warning"></i>
+                </div>
+              </div>
+              <div class="col-7 col-stats">
+                <div class="numbers">
+                  <p class="card-category">Documents</p>
+                  <h4 class="card-title">{{ total_document }}</h4>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-3">
+        <div class="card card-stats card-round">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-5">
+                <div class="icon-big text-center">
+                  <i class="icon-user-following text-success"></i>
+                </div>
+              </div>
+              <div class="col-7 col-stats">
+                <div class="numbers">
+                  <p class="card-category">Utilisateurs</p>
+                  <h4 class="card-title">{{ total_user }}</h4>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-3">
+        <div class="card card-stats card-round">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-5">
+                <div class="icon-big text-center">
+                  <i class="icon-speech text-danger"></i>
+                </div>
+              </div>
+              <div class="col-7 col-stats">
+                <div class="numbers">
+                  <p class="card-category">Commentaires</p>
+                  <h4 class="card-title">{{ total_comment }}</h4>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-3">
+        <div class="card card-stats card-round">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-5">
+                <div class="icon-big text-center">
+                  <i class="icon-graduation text-primary"></i>
+                </div>
+              </div>
+              <div class="col-7 col-stats">
+                <div class="numbers">
+                  <p class="card-category">Auteurs</p>
+                  <h4 class="card-title">{{ total_othor }}</h4>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      {% comment %}documents publies{% endcomment %}
+       <div class="col-md-1é">
+            <div class="card card-round">
+              <div class="card-header">
+                <div class="card-head-row card-tools-still-right">
+                  <h4 class="card-title">Documents</h4>
+                  <div class="card-tools">
+                    <button class="btn btn-icon btn-link btn-primary btn-xs"><span class="fa fa-angle-down"></span></button>
+                    <button class="btn btn-icon btn-link btn-primary btn-xs btn-refresh-card"><span class="fa fa-sync-alt"></span></button>
+                    <button class="btn btn-icon btn-link btn-primary btn-xs"><span class="fa fa-times"></span></button>
+                  </div>
+                </div>
+                <p class="card-category">Les  dernières documents (publiés ou non)</p>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                <div class="table-responsive">
+                          <table
+                            id="basic-datatables"
+                            class="display table table-striped table-hover"
+                          >
+                            <thead>
+                              <tr>
+                                <th>Titre</th>
+                                <th>Desciption</th>
+                                <th>Auteur</th>
+                                <th>Image</th>
+                                <th>Fichier</th>
+                                <th>Date</th>
+                                <th>Approuvé</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                              
+                                {% if documents %}
+                                    {% for document in documents %}
+                                    <tr>
+                                        <td class="text-end">{{ document.title }}</td>
+                                        <td class="text-end">{{ document.description }}</td>
+                                        <td class="text-end">
+                                        {% if not document.author.get_full_name == ' ' %}
+                                            {{ document.author.get_full_name }}
+                                        {% else %}
+                                            {{ document.author.username }}
+                                        {% endif %}
+                                        </td>
+                                        <td class="text-end">
+                                        <img src="{{ document.image.url }}" alt="" width="50" />
+                                        </td>
+                                        <td class="text-end">
+                                        <a href="{{ document.file.url }}" download><i class="fa fa-download text-primary"></i></a>
+                                        </td>
+                                        <td class="text-end">{{ document.date_publication }}</td>
+                                        <td>
+                                        {% if document.prouve %}
+                                            <span class="badge badge-success">Approuvé</span>
+                                        {% else %}
+                                            <span class="badge badge-danger">Non approuvé</span>
+                                        {% endif %}
+                                        </td>
+                                        <td class="text-end">
+                                        <div class="d-flex gap-2">
+                                            {% if document.document_type == 'Thesis' %}
+                                            <a href="{% url 'admin:app_thesis_change' document.id %}"><i class="fa fa-edit"></i></a>
+                                            <a href="{% url 'admin:app_thesis_delete' document.id %}"><i class="fa fa-times text-danger"></i></a>
+                                            {% elif document.document_type == 'Memory' %}
+                                            <a href="{% url 'admin:app_memory_change' document.id %}"><i class="fa fa-edit"></i></a>
+                                            <a href="{% url 'admin:app_memory_delete' document.id %}"><i class="fa fa-times text-danger"></i></a>
+                                            {% endif %}
+                                        </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <p class="lead">Pas de documents trouvés</p>
+                                {% endif %}
+                        </tbody>
+                            
+                          </table>
+                        </div>
+              </div>
+            </div>
+            
+          </div>
+
+           
+          
+        </div>
+
+    
+  </div>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% load static %}
+<div class="sidebar" data-background-color="dark">
+  <div class="sidebar-logo">
+    <!-- Logo Header -->
+    <div class="logo-header mt-4" data-background-color="dark">
+      <a href="index.html" class="logo"><img src=" {% static 'assets/img/binda-log.png' %} " alt="navbar brand" class="navbar-brand" height="100" /></a>
+      <div class="nav-toggle">
+        <button class="btn btn-toggle toggle-sidebar"><i class="gg-menu-right"></i></button>
+        <button class="btn btn-toggle sidenav-toggler"><i class="gg-menu-left"></i></button>
+      </div>
+      <button class="topbar-toggler more"><i class="gg-more-vertical-alt"></i></button>
+    </div>
+    <!-- End Logo Header -->
+  </div>
+  <div class="sidebar-wrapper scrollbar scrollbar-inner">
+    <div class="sidebar-content">
+      <ul class="nav nav-secondary">
+        <li class="nav-item 
+        {% if active_home %}
+            {{ active_home }}
+          {% endif %}
+           ">
+          <a href="{% url 'app:home' %}">
+            <i class="fas fa-home"></i>
+            <p>Home</p>
+          </a>
+        </li>
+        <li class="nav-item  {% if active_thesis or active_memory %}
+          active sub-menu
+        {% endif %}">
+          <a data-bs-toggle="collapse" href="#tables">
+            <i class="fas fa-book"></i>
+            <p>Document</p>
+            <span class="caret"></span>
+          </a>
+          <div class="collapse  {% if active_thesis or active_memory %}
+          show
+        {% endif %}" id="tables">
+            <ul class="nav nav-collapse">
+              <li class="{% if active_thesis %}
+          active
+        {% endif %}">
+                <a href="{% url 'app:view_thesis' %}"><span class="sub-item">Thèse</span></a>
+              </li>
+              <li class="{% if active_memory %}
+          active
+        {% endif %}">
+                <a href="{% url 'app:view_memories' %}"><span class="sub-item">Mémoire</span></a>
+              </li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

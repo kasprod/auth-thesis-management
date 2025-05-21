@@ -1,0 +1,25 @@
+# .gitignore
+
+# Environnement Python
+__pycache__/
+*.py[cod]
+*.env
+*.sqlite3
+*.log
+
+# Environnement virtuel
+venv/
+env/
+
+# Fichiers de config d'éditeur
+.vscode/
+.idea/
+
+# Django-specific
+db.sqlite3
+/staticfiles/
+media/
+
+# OS
+.DS_Store
+Thumbs.db

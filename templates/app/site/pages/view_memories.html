@@ -1,0 +1,132 @@
+{% extends "app/site/base.html" %}
+{% load static %}
+
+{% block container %}
+    <div class="page-inner">
+    <div class="page-header">
+        <h3 class="fw-bold mb-3">Mémoires</h3>
+        <ul class="breadcrumbs mb-3">
+            <li class="nav-home">
+                <a href="{% url 'app:home' %}">
+                    <i class="icon-home"></i>
+                </a>
+            </li>
+            <li class="separator">
+                <i class="icon-arrow-right"></i>
+            </li>
+            <li class="nav-item">
+                <a href="#">Documents</a>
+            </li>
+            <li class="separator">
+                <i class="icon-arrow-right"></i>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'app:view_memories' %}">Mémoires</a>
+            </li>
+        </ul>
+
+        <div class="ms-md-auto py-2 py-md-0">
+            <a href="{% url 'app:add_memory' %}" class="btn btn-label-info btn-round me-2">Publier</a>
+        </div>
+
+    </div>  
+    
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Toutes les thèses</div>
+                </div>
+                <div class="card-body">
+                    {% comment %} Les cartes {% endcomment %}
+                    <div class="row">
+                        {% comment %} ------------------------------------ {% endcomment %}
+                        
+                        {% if documents %}
+                        {% for document in documents %}
+                        <div class="col-md-4">
+                            <div class="card card-post card-round">
+                                <img
+                                    class="card-img-top"
+                                    src="{{document.image.url}}"
+                                    alt="Card image cap"
+                                />
+                                <div class="card-body">
+                                    <div class="d-flex">
+                                        <div class="avatar">
+                                            {% if  document.author.profile_photo %}
+                                            <img
+                                            src="{{document.author.profile_photo.url}}"
+                                            alt="..."
+                                            class="avatar-img rounded-circle"
+                                            />
+                                            {% else %}
+                                              <i class="fas fa-user fs-5"></i>
+                                            {% endif %}
+                                          
+                                        </div>
+                                        <div class="info-post ms-2">
+                                            <p class="username">{{document.author.username}} 
+                                            {% if user == document.author %}
+                                                <small class="ml-2">(Vous)</small>
+                                            {% endif %}
+                                                </p>
+                                            <p class="date text-muted">{{document.date_publication}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="separator-solid"></div>
+                                    <p class="card-category text-info mb-1">
+                                    
+                                    {% if document.author.is_student %}
+                                        <a href="#">Etudiant</a> 
+                                    {% elif document.author.is_academic_personal %}
+                                        <a href="#">Personel Académique</a>
+                                    {% elif document.author.is_seacher %}
+                                        <a href="#">Chercheur</a>
+                                    {% else %}
+                                        <a href="">Non précisé</a>
+                                    {% endif %}
+                                        
+                                    </p>
+                                    <h3 class="card-title">
+                                        <a href="#"> {{document.title}} </a>
+                                    </h3>
+                                    <p class="card-text">
+                                    {{document.description}}
+                                    </p>
+                                    {% if document.document_type == 'Thesis' %}
+                                        <a href="{% url 'app:document_details' 'thesis' document.id %}" class="btn btn-primary btn-rounded btn-sm"
+                                    >Voir plus</a
+                                    >
+                                    {% elif document.document_type == 'Memory' %}
+                                        <a href="{% url 'app:document_details' 'memory' document.id %}" class="btn btn-primary btn-rounded btn-sm"
+                                        >Voir plus</a
+                                        >
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        {% endfor %}
+                        {% else %}
+                         <p>
+                            Pas des publications trouvées 
+                         </p>
+                        {% endif %}
+                            
+                     
+                        {% comment %} ------------------------------------ {% endcomment %}
+                   
+                    </div>
+                    
+                </div>
+            </div>
+    </div>
+</div>
+
+
+
+
+    
+{% endblock container %}
+    

@@ -1,0 +1,116 @@
+{% extends "accounts/base.html" %}
+{% load static %}
+
+
+{% block content %}
+<div class="page-inner">
+<div class="row d-flex justify-content-center align-items-center" style="margin-top:50px;">
+    <div class="col-md-4">
+      <div class="card card-round shadow  ">
+        <div class="card-body">
+          <div class="card-head-row card-tools-still-right">
+            <div class="card-title" style="font-size:1.8rem;">Nouveau Compte</div>
+          </div>
+          <hr>
+          <div class="py-4">
+            <div class="col-md-12">
+              
+              {% if messages %}
+                {% for message in messages %}
+              <div class="alert 
+              {% if message.tags == 'success' %}
+                alert-success
+              {% elif message.tags == 'error'  %}
+              alert-danger
+              {% endif %}
+
+                ">
+                {{message}}
+              </div>
+              {% endfor %}
+              {% endif %}
+                
+                <form method="post" method="{% url 'accounts:register' %}" class="form-login form" id="form-register">
+                  {% csrf_token %}
+                      <div class="form-group {% if data_error and data_error.username %}has-error has-feedback {% endif %}">
+                          <label>Nom d'utilisateur</label>
+                          <input
+                            id="username"
+                            type="text"
+                            class="form-control"
+                            placeholder="Entrez le nom d'utilisateur"
+                            name="username"
+                            required
+                          />
+                          {% if data_error and data_error.username %}
+                          <small id="usernameHelp" class="form-text text-danger"
+                            >{{data_error.username}}</small
+                          >
+                         {% endif %}
+                          
+                      </div>
+                      <div class="form-group {% if data_error and data_error.email %}has-error has-feedback {% endif %}">
+                          <label>Email</label>
+                          <input
+                            id="email"
+                            type="email"
+                            class="form-control"
+                            placeholder="Entrez le nom d'utilisateur"
+                            name="email"
+                            required
+                          />
+                          {% if data_error and data_error.email %}
+                          <small id="emailHelp" class="form-text text-danger"
+                            >{{data_error.email}}</small
+                          >
+                         {% endif %}
+                      </div>
+                      <div class="form-group {% if data_error and data_error.password %}has-error has-feedback {% endif %}">
+                          <label>Mot de passe <span class="text-danger">*</span></label>
+                          <input
+                            id="password"
+                            type="password"
+                            class="form-control"
+                            name="password"
+                            required
+                          />
+                          {% if data_error and data_error.password %}
+                          <small id="passwordHelp" class="form-text text-danger"
+                            >{{data_error.password}}</small
+                          >
+                         {% endif %}
+                      </div>
+                      <div class="form-group {% if data_error and data_error.pasword1 %}has-error has-feedback {% endif %}">
+                          <label>Confirmez le mot de passe</label>
+                          <input
+                            id="password1"
+                            type="password"
+                            class="form-control"
+                            name="password1"
+                            required
+                          />
+                          {% if data_error and data_error.password1 %}
+                          <small id="password1Help" class="form-text text-danger"
+                            >{{data_error.password1}}</small
+                          >
+                         {% endif %}
+                      </div>
+                    <div class="card-action d-flex justify-content-center align-items-center  flex-column gap-2">
+                        <button type="submit" class='btn btn-success col-12 col-md-6 '>Soumettre</button>
+                        <small class="text-muted">Déjà un compte? <a href="{% url 'accounts:login' %}" class='text-primary'>login</span></p>
+                    </div>
+                </form>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+</div>
+
+{% endblock content %}
+{% block js %}
+{% comment %} <script src="{% static 'assets/js/accounts/register.js'%}"></script> {% endcomment %}
+{% endblock js %}
+    
